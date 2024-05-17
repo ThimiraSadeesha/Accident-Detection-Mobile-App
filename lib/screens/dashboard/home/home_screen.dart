@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:fluttertest/Screens/vehicle_info_screen.dart';
+
+import '../../menu/notification.dart';
+import '../../menu/vehicle_info_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome note
+            const SizedBox(height: 50),
             const Text(
               'Hi, Sadeesha...!',
               style: TextStyle(
@@ -22,30 +24,24 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Emergency request button
             ElevatedButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
-
                 ),
                 minimumSize: const Size(double.infinity, 70),
-
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Icon(Icons.warning, color: Colors.white,),
+                  Icon(Icons.warning, color: Colors.white),
                   SizedBox(width: 8),
-                  Text('Emergency Request' ,style: TextStyle(
-                    color: Colors.white, // Change the text color to blue (or any other color)
-                  ),)
-                  ,
+                  Text(
+                    'Emergency Request',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
@@ -58,50 +54,50 @@ class HomeScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey,
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
-
                 ),
                 minimumSize: const Size(double.infinity, 70),
-                // Adjust the width and height as needed
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Icon(Icons.cancel, color: Colors.white,),
-                  SizedBox(width: 8, height: 12,),
-                  Text('Cancel Emergency',style: TextStyle(
-                    color: Colors.white, // Change the text color to blue (or any other color)
-                  ),),
+                  Icon(Icons.cancel, color: Colors.white),
+                  SizedBox(width: 8),
+                  Text(
+                    'Cancel Emergency',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ],
               ),
             ),
-
-
             const SizedBox(height: 30),
 
-            // Two rows of two buttons each
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildLargeSquareButton('Notification', Icons.notifications, () {
-
-            }),
-          _buildLargeSquareButton('Emergency', Icons.warning, () {
-            _showEmergencyRequestPopup(context);
-          }),]),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              _buildLargeSquareButton(
+                  'Notification', Icons.notifications, () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VehicleInfoScreen()),
+                );
+              }),
+              _buildLargeSquareButton('Emergency', Icons.warning, () {
+                _showEmergencyRequestPopup(context);
+              }),
+            ]),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildLargeSquareButton('Vehicle', Icons.car_crash, () {
-                  // VehicleInfo();
-              // Add logic specific to Hospital button
-            }),
-        _buildLargeSquareButton('Other', Icons.help, () {
-      // Add logic specific to Hospital button
-    })
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                  );
+                }),
+                _buildLargeSquareButton('Other', Icons.help, () {
+                  // Add logic specific to Other button
+                })
               ],
             ),
           ],
@@ -110,38 +106,33 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Helper method to create large square buttons with icons
-  Widget _buildLargeSquareButton(String buttonText, IconData iconData,VoidCallback onPressed) {
+  Widget _buildLargeSquareButton(
+      String buttonText, IconData iconData, VoidCallback onPressed) {
     return ElevatedButton(
-      onPressed: () {
-        onPressed();
-      },
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        fixedSize: const Size(150, 150), // Adjust the width and height as needed
+        fixedSize: const Size(150, 150),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(iconData,color: Colors.black, size: 40),
+          Icon(iconData, color: Colors.black, size: 40),
           const SizedBox(height: 8),
           Text(
             buttonText,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-            color: Colors.black, // Set the text color to red
-          ),
-
+            style: const TextStyle(color: Colors.black),
           ),
         ],
       ),
     );
   }
 }
-//popup message
+
 void _showEmergencyRequestPopup(BuildContext context) {
   showDialog(
     context: context,
@@ -171,8 +162,8 @@ void _showEmergencyRequestPopup(BuildContext context) {
   );
 }
 
-
-Widget _buildSquareButton(String buttonText, IconData iconData, BuildContext context) {
+Widget _buildSquareButton(
+    String buttonText, IconData iconData, BuildContext context) {
   return ElevatedButton(
     onPressed: () {
       // Add logic for each button
@@ -182,7 +173,7 @@ Widget _buildSquareButton(String buttonText, IconData iconData, BuildContext con
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
-      fixedSize: const Size(130, 80), // Adjust the width and height as needed
+      fixedSize: const Size(130, 80),
     ),
     child: Row(
       mainAxisSize: MainAxisSize.max,
@@ -192,14 +183,9 @@ Widget _buildSquareButton(String buttonText, IconData iconData, BuildContext con
         Text(
           buttonText,
           textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
+          style: const TextStyle(color: Colors.black),
         ),
       ],
     ),
   );
 }
-
-
-

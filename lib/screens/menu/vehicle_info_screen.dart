@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class VehicleInfo extends StatelessWidget {
-  const VehicleInfo({Key? key}) : super(key: key);
+class VehicleInfoScreen extends StatelessWidget {
+  const VehicleInfoScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class VehicleInfo extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter Make and Model',
                     border: OutlineInputBorder(),
                   ),
@@ -44,7 +44,7 @@ class VehicleInfo extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter Registration Number',
                     border: OutlineInputBorder(),
                   ),
@@ -57,7 +57,7 @@ class VehicleInfo extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter Insurance Company Name',
                     border: OutlineInputBorder(),
                   ),
@@ -70,7 +70,7 @@ class VehicleInfo extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Enter Policy Number',
                     border: OutlineInputBorder(),
                   ),

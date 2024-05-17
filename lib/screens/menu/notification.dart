@@ -7,13 +7,20 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications"),
+          title: const Text(
+            "Notifications",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        backgroundColor: Colors.red,
+          iconTheme: const IconThemeData(color: Colors.white)
       ),
       body: ListView(
         children: const [
           NotificationTile(
-            name: "Lylah Barker",
-            message: "@harleenwhelan Could you schedule a coffee with...",
+            name: "Lelah Barker",
+            message: "@harlequin Could you schedule a coffee with...",
             time: "Today at 10:25",
             role: "Product Manager",
           ),
@@ -24,13 +31,13 @@ class NotificationScreen extends StatelessWidget {
             role: "Head of Growth",
           ),
           NotificationTile(
-            name: "Ihsan Bowes",
+            name: "Ihsan Bows",
             message: "applied for Visual Designer",
             time: "2 days ago",
             role: "Visual Designer",
           ),
           NotificationTile(
-            name: "Lylah Barker",
+            name: "Lelah Barker",
             message: "added you to the hiring team for Head of Growth",
             time: "2 days ago",
             role: "Head of Growth",
