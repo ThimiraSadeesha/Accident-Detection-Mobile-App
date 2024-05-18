@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../menu/notification.dart';
 import '../../menu/vehicle_info_screen.dart';
 
@@ -78,7 +77,8 @@ class HomeScreen extends StatelessWidget {
                   'Notification', Icons.notifications, () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const VehicleInfoScreen()),
+                  MaterialPageRoute(builder: (context) => const NotificationScreen()),
+
                 );
               }),
               _buildLargeSquareButton('Emergency', Icons.warning, () {
@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                 _buildLargeSquareButton('Vehicle', Icons.car_crash, () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                    MaterialPageRoute(builder: (context) => const VehicleInfoScreen()),
                   );
                 }),
                 _buildLargeSquareButton('Other', Icons.help, () {

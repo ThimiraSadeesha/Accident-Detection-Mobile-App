@@ -44,7 +44,7 @@ class _MapScreenState extends State<MapScreen> {
       return Marker(
         markerId: MarkerId("$idx"),
         position: loc,
-        infoWindow: InfoWindow(title: "Shop ${idx + 1}"),
+        infoWindow: InfoWindow(title: "Location ${idx + 1}"),
         onTap: () => _updateCameraPosition(loc.latitude, loc.longitude),
       );
     }).toSet();
@@ -66,6 +66,9 @@ class _MapScreenState extends State<MapScreen> {
         myLocationButtonEnabled: true,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
+          setState(() {
+            _markers = _createMarkers();
+          });
         },
         markers: _markers,
       ),
