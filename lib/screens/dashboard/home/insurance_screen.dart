@@ -6,20 +6,8 @@ class InsuranceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Insurance',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-        ),
-        primary: false, // Set primary to false to remove extra space
-      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(15.0, 0, 15.0, 15.0), // Adjust the top padding
+        padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -68,7 +56,6 @@ class InsuranceScreen extends StatelessWidget {
 
   Widget _buildUpdateButton(BuildContext context) {
     return ElevatedButton(
-
       onPressed: () {
         // Navigate to the user profile editing screen
         Navigator.push(
@@ -127,7 +114,6 @@ class InsuranceScreen extends StatelessWidget {
           case 'Submit a medical claim':
           // Navigate to the screen for submitting a medical claim
             break;
-
           default:
             break;
         }
@@ -169,6 +155,7 @@ class UserProfileEditingScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _buildProfileImageView() {
     return Container(
       width: 180,

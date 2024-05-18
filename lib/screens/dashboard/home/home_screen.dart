@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import '../../menu/emergencyContact.dart';
 import '../../menu/notification.dart';
+import '../../menu/user_registration_screen.dart';
 import '../../menu/vehicle_info_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,29 +11,23 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 50),
-            const Text(
-              'Hi, Sadeesha...!',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                _showEmergencyRequestPopup(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                minimumSize: const Size(double.infinity, 70),
+                minimumSize: const Size(double.infinity, 90),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.max,
@@ -45,18 +42,17 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Cancel Emergency button
             ElevatedButton(
               onPressed: () {
-                // Add logic for canceling emergency
+                // Add your cancel emergency logic here
+                print('Cancel Emergency');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.grey,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                minimumSize: const Size(double.infinity, 70),
+                minimumSize: const Size(double.infinity, 75),
               ),
               child: const Row(
                 mainAxisSize: MainAxisSize.max,
@@ -70,22 +66,22 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
-
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              _buildLargeSquareButton(
-                  'Notification', Icons.notifications, () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationScreen()),
-
-                );
-              }),
-              _buildLargeSquareButton('Emergency', Icons.warning, () {
-                _showEmergencyRequestPopup(context);
-              }),
-            ]),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildLargeSquareButton('Notification', Icons.notifications, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const NotificationScreen()),
+                  );
+                }),
+                _buildLargeSquareButton('Emergency', Icons.warning, () {
+                  _showEmergencyRequestPopup(context);
+                }),
+              ],
+            ),
+            const SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -95,19 +91,23 @@ class HomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const VehicleInfoScreen()),
                   );
                 }),
-                _buildLargeSquareButton('Other', Icons.help, () {
-                  // Add logic specific to Other button
-                })
+                _buildLargeSquareButton('Emergency Persons', Icons.help, () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const EmergencyContactScreen()),
+                  );
+                }),
               ],
             ),
+            const SizedBox(height: 40),
+            _buildSlider(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildLargeSquareButton(
-      String buttonText, IconData iconData, VoidCallback onPressed) {
+  Widget _buildLargeSquareButton(String buttonText, IconData iconData, VoidCallback onPressed) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -131,6 +131,94 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildSlider() {
+    return Expanded(
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 3, // Number of cards
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: _buildClimateCard(
+              'Temperature: ${20 + index}°C',
+              'Humidity: ${50 + index}%',
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildClimateCard(String temperature, String humidity) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Climate Changes',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      temperature,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      humidity,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                  width:40,
+                  child: LineChart(
+                    LineChartData(
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots: [
+                            const FlSpot(0, 1),
+                            const FlSpot(1, 3),
+                            const FlSpot(2, 2),
+                            const FlSpot(3, 5),
+                            const FlSpot(4, 4),
+                          ],
+                          isCurved: true,
+                          color: Colors.red,
+                          barWidth: 4,
+                          belowBarData: BarAreaData(show: false),
+                        ),
+                      ],
+                      titlesData: const FlTitlesData(show: false),
+                      borderData: FlBorderData(show: false),
+                      gridData: const FlGridData(show: false),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 void _showEmergencyRequestPopup(BuildContext context) {
@@ -141,19 +229,23 @@ void _showEmergencyRequestPopup(BuildContext context) {
         title: const Text('Emergency Request'),
         content: const Text('Choose an action:'),
         actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
-              _buildSquareButton('Hospital', Icons.local_hospital, context),
-              _buildSquareButton('Police', Icons.local_police, context),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildSquareButton('Fire', Icons.fire_extinguisher, context),
-              _buildSquareButton('Other', Icons.apps, context),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSquareButton('Hospital', Icons.local_hospital, context),
+                  _buildSquareButton('Police', Icons.local_police, context),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSquareButton('Fire', Icons.fire_extinguisher, context),
+                  _buildSquareButton('Other', Icons.apps, context),
+                ],
+              ),
             ],
           ),
         ],
@@ -162,11 +254,9 @@ void _showEmergencyRequestPopup(BuildContext context) {
   );
 }
 
-Widget _buildSquareButton(
-    String buttonText, IconData iconData, BuildContext context) {
+Widget _buildSquareButton(String buttonText, IconData iconData, BuildContext context) {
   return ElevatedButton(
     onPressed: () {
-      // Add logic for each button
       Navigator.pop(context); // Close the popup
     },
     style: ElevatedButton.styleFrom(

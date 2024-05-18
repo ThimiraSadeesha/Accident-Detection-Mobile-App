@@ -99,6 +99,20 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
+              const Text(
+                'already have account?',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  shadows: [Shadow( // Adds a shadow to the text
+                    blurRadius: 10.0,
+                    color: Colors.black,
+                    offset: Offset(2.0, 2.0),
+                  )],
+                ),
+                textAlign: TextAlign.center,
+              ),
               const Spacer(flex: 2),
             ],
           ),
