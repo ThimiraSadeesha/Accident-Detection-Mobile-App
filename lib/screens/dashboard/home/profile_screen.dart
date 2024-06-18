@@ -1,4 +1,7 @@
+import 'package:accident_detection_app/screens/menu/notification.dart';
+import 'package:accident_detection_app/screens/menu/vehicle_info_screen.dart';
 import 'package:flutter/material.dart';
+import '../../menu/emergencyContact.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -6,30 +9,22 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 32,
-          ),
-        ),
-      ),
       body: Stack(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const SizedBox(height: 50), // Adjusted this to be inside the Column
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                 child: _buildProfileImage(),
+                child: _buildProfileImage(),
               ),
               _buildSettingItem(context, 'Personal Information'),
               _buildSettingItem(context, 'Emergency Contacts'),
               _buildSettingItem(context, 'Notification Preference'),
-              _buildSettingItem(context, 'Other'),
-              _buildSettingItem(context, 'Other'),
-              _buildSettingItem(context, 'logout'),
+              _buildSettingItem(context, 'Vehicle Preference'),
+              _buildSettingItem(context, 'Map'),
+              _buildSettingItem(context, 'Settings'),
             ],
           ),
           Positioned(
@@ -46,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildSettingItem(BuildContext context, String title) {
     return ListTile(
       title: Text(title),
-      trailing: Icon(Icons.arrow_forward_ios),
+      trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
         // Add your logic here for handling button taps
         switch (title) {
@@ -54,10 +49,22 @@ class ProfileScreen extends StatelessWidget {
           // Navigate to the personal information screen
             break;
           case 'Emergency Contacts':
-          // Navigate to the emergency contacts screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const EmergencyContactScreen()),
+            );
             break;
           case 'Notification Preference':
-          // Navigate to the notification presence screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NotificationScreen()),
+            );
+            break;
+            case 'Vehicle Preference':
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const VehicleInfoScreen()),
+            );
             break;
           default:
             break;
@@ -69,7 +76,7 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildLogoutButton(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        // Add your logic here for handling the logout button tap
+
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
@@ -91,11 +98,10 @@ class ProfileScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
-          fit: BoxFit.scaleDown,  // Use BoxFit.fill to show the entire image without cropping
+          fit: BoxFit.scaleDown, // Changed to BoxFit.cover for better image fit
           image: AssetImage('images/me.jpg'),
         ),
       ),
     );
   }
-
 }
