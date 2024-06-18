@@ -69,8 +69,6 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
       } catch (e) {
         print('Error sending data: $e');
       }
-
-      // Clear the form fields
       _formKey.currentState!.reset();
     }
   }
