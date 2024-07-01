@@ -2,6 +2,7 @@ import 'package:accident_detection_app/screens/menu/notification.dart';
 import 'package:accident_detection_app/screens/menu/vehicle_info_screen.dart';
 import 'package:flutter/material.dart';
 import '../../menu/emergencyContact.dart';
+import '../../user/user-registration.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 50), // Adjusted this to be inside the Column
+              const SizedBox(height: 50),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: _buildProfileImage(),
@@ -43,10 +44,12 @@ class ProfileScreen extends StatelessWidget {
       title: Text(title),
       trailing: const Icon(Icons.arrow_forward_ios),
       onTap: () {
-        // Add your logic here for handling button taps
         switch (title) {
           case 'Personal Information':
-          // Navigate to the personal information screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  RegistrationScreen()),
+            );
             break;
           case 'Emergency Contacts':
             Navigator.push(
