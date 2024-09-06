@@ -1,3 +1,4 @@
+import 'package:accident_detection_app/screens/dashboard/home/map_screen.dart';
 import 'package:accident_detection_app/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 

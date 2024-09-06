@@ -2,6 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'dart:math' show cos, sqrt, asin;
+
+const String API_KEY = 'AIzaSyDJe5ZbrJYaerJn_iaKVrabZ1ZRGjKgBV0';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({Key? key}) : super(key: key);
@@ -12,23 +16,46 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer<GoogleMapController>();
-  final TextEditingController _destinationController = TextEditingController();
   Set<Marker> _markers = {};
+  List<LatLng> polylineCoordinates = [];
+  Map<PolylineId, Polyline> polylines = {};
+  late Position _currentPosition;
+  late StreamSubscription<Position> _positionStream;
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
     _markers = _createMarkers();
+    _startLocationUpdates();
+  }
+
+  @override
+  void dispose() {
+    _positionStream.cancel();
+    super.dispose();
   }
 
   void _getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        _currentPosition = position;
+      });
       _updateCameraPosition(position.latitude, position.longitude, zoom: 14.0);
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  void _startLocationUpdates() {
+    var locationOptions = LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10);
+    _positionStream = Geolocator.getPositionStream(locationSettings: locationOptions).listen((Position position) {
+      setState(() {
+        _currentPosition = position;
+        _updateCameraPosition(position.latitude, position.longitude, zoom: 14.0);
+      });
+    });
   }
 
   Set<Marker> _createMarkers() {
@@ -57,48 +84,11 @@ class _MapScreenState extends State<MapScreen> {
     controller.animateCamera(CameraUpdate.newCameraPosition(position));
   }
 
-  void _getDirections() {
-    // Add your logic to get directions here
-    String destination = _destinationController.text;
-    print('Destination: $destination');
-    // You might use a directions API like Google Directions API to get the route
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 50),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _destinationController,
-                  decoration: const InputDecoration(
-                    hintText: 'Destination',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: _getDirections,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  child: const Text(
-                    '                   Go                ',
-                    style: TextStyle(color: Colors.white,fontSize: 20), // Text color
-                  ),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: GoogleMap(
               mapType: MapType.hybrid,
@@ -112,6 +102,7 @@ class _MapScreenState extends State<MapScreen> {
                 });
               },
               markers: _markers,
+              polylines: Set<Polyline>.of(polylines.values),
               onTap: (LatLng position) {
                 _addMarker(position, 'Selected Location');
               },

@@ -107,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildLargeSquareButton('Notification', Icons.notifications, () {
+                _buildLargeSquareButton('Notification', Icons.notifications,
+                    () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
