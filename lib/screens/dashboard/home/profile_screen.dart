@@ -88,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       child: const Text(
-        'Logout',
+        'Remove Account',
         style: TextStyle(color: Colors.white),
       ),
     );
@@ -101,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(
-          fit: BoxFit.scaleDown, // Changed to BoxFit.cover for better image fit
+          fit: BoxFit.scaleDown,
           image: AssetImage('images/me.jpg'),
         ),
       ),
