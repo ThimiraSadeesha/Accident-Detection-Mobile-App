@@ -1,10 +1,29 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+
     <application
         android:label="accident_detection_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:foregroundServiceType="location|microphone|dataSync">
+
+        <service
+            android:name="me.brunogabriel.flutterforegroundtask.FlutterForegroundTaskService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location|dataSync|mediaPlayback"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
 
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDJe5ZbrJYaerJn_iaKVrabZ1ZRGjKgBV0"/>

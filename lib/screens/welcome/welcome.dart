@@ -1,9 +1,41 @@
-import 'package:accident_detection_app/screens/dashboard/home/navigation/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
+import 'package:flutter_foreground_task/flutter_foreground_task.dart';
+import 'package:accident_detection_app/screens/dashboard/home/navigation/bottom_navigation.dart';
+import '../../main.dart';
+import '../menu/user_registration_screen.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _startForegroundTask();
+  }
+
+  Future<void> _startForegroundTask() async {
+    if (!await FlutterForegroundTask.isRunningService) {
+      await FlutterForegroundTask.startService(
+        notificationTitle: 'Safety App Running',
+        notificationText: 'Tracking and commands active.',
+        callback: backgroundTaskCallback,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    // Optionally stop the foreground service when the widget is disposed
+    // Uncomment the following line if you want to stop the service when the user leaves this screen
+    // FlutterForegroundTask.stopService();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +66,13 @@ class WelcomeScreen extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
-                  shadows: [Shadow( // Adds a shadow to the text
-                    blurRadius: 10.0,
-                    color: Colors.black,
-                    offset: Offset(2.0, 2.0),
-                  )],
+                  shadows: [
+                    Shadow(
+                      blurRadius: 10.0,
+                      color: Colors.black,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -48,11 +82,13 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
-                  shadows: [Shadow( // Adds a shadow to the text
-                    blurRadius: 10.0,
-                    color: Colors.black,
-                    offset: Offset(2.0, 2.0),
-                  )],
+                  shadows: [
+                    Shadow(
+                      blurRadius: 10.0,
+                      color: Colors.black,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -62,11 +98,13 @@ class WelcomeScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
-                  shadows: [Shadow( // Adds a shadow to the text
-                    blurRadius: 10.0,
-                    color: Colors.black,
-                    offset: Offset(2.0, 2.0),
-                  )],
+                  shadows: [
+                    Shadow(
+                      blurRadius: 10.0,
+                      color: Colors.black,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -78,8 +116,8 @@ class WelcomeScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const MyHomePage()),
+                        context,
+                        MaterialPageRoute(builder: (context) => const MyHomePage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -99,19 +137,28 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              const Text(
-                'already have account?',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                  shadows: [Shadow( // Adds a shadow to the text
-                    blurRadius: 10.0,
-                    color: Colors.black,
-                    offset: Offset(2.0, 2.0),
-                  )],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegistrationForm()),
+                  );
+                },
+                child: const Text(
+                  'Already have an account?',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.blue,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Colors.black,
+                        offset: Offset(2.0, 2.0),
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               const Spacer(flex: 2),
             ],
