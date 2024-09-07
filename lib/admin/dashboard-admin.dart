@@ -30,28 +30,28 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.blue,
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.blue,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
             icon: Icon(Icons.local_hospital),
             label: 'Services',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
             icon: Icon(Icons.car_crash),
             label: 'Accidents',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
             icon: Icon(Icons.warning),
             label: 'Emergencies',
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.blue,
             icon: Icon(Icons.people),
             label: 'Users',
           ),

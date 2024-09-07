@@ -9,13 +9,17 @@ class ServicesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Emergency Services'),
+        title: const Text('Emergency Services',style: TextStyle(
+          fontSize: 24,fontWeight: FontWeight.bold,
+        ),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+
+
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -23,7 +27,20 @@ class ServicesPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => PoliceServicesPage()),
                 );
               },
-              child: Text('Manage Police Services'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+              ),
+              child: const Text(
+                'Manage Police',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -33,7 +50,20 @@ class ServicesPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => HospitalServicesPage()),
                 );
               },
-              child: Text('Manage Hospital Services'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+              ),
+              child: const Text(
+                'Manage Hospital',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -43,7 +73,20 @@ class ServicesPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => InsuranceServicesPage()),
                 );
               },
-              child: Text('Manage Insurance Services'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+              ),
+              child: const Text(
+                'Manage Insurance',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
             SizedBox(height: 16),
             ElevatedButton(
@@ -53,7 +96,20 @@ class ServicesPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => FireServicesPage()),
                 );
               },
-              child: Text('Manage Fire Services'),
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+              ),
+              child: const Text(
+                'Manage Fire ',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
             ),
           ],
         ),
