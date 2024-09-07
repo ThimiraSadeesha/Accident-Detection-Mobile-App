@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:fl_chart/fl_chart.dart';
 import '../../menu/emergencyContact.dart';
 import '../../menu/notification.dart';
 import '../../menu/vehicle_info_screen.dart';
@@ -16,11 +18,16 @@ class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
   int _currentPage = 0;
   late Timer _timer;
+  List<Map<String, String>> climateData = [
+    {'temperature': 'Loading...', 'humidity': 'Loading...'},
+    {'temperature': 'Loading...', 'humidity': 'Loading...'},
+  ];
 
   @override
   void initState() {
     super.initState();
     _startAutoSlide();
+    _startClimateDataUpdate();
   }
 
   @override
@@ -46,6 +53,45 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+
+  Future<void> fetchClimateData() async {
+    const apiUrl =
+        'https://api.open-meteo.com/v1/forecast?latitude=6.842696&longitude=80.017209&current=temperature_2m,relative_humidity_2m';
+
+    try {
+      final response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {'accept': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final temperature = '${data['current']['temperature_2m']}°C';
+        final humidity = '${data['current']['relative_humidity_2m']}%';
+
+        setState(() {
+          // Update all slots with the same climate data for now
+          for (int i = 0; i < climateData.length; i++) {
+            climateData[i] = {
+              'temperature': temperature,
+              'humidity': humidity,
+            };
+          }
+        });
+      } else {
+        print('Failed to load data: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching data: $error');
+    }
+  }
+
+  void _startClimateDataUpdate() {
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      fetchClimateData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 50),
+            const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () {
                 _showEmergencyRequestPopup(context);
@@ -78,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 // Add your cancel emergency logic here
@@ -107,8 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildLargeSquareButton('Notification', Icons.notifications,
-                    () {
+                _buildLargeSquareButton('Notification', Icons.notifications, () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -120,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -141,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 40),
-            _buildSlider(3), // Add the slider here
+            _buildSlider(climateData.length), // Slider now displays live climate data
           ],
         ),
       ),
@@ -162,70 +207,8 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(iconData, color: Colors.black, size: 40),
-          const SizedBox(height: 8),
-          Text(
-            buttonText,
-            textAlign: TextAlign.center,
-            style: const TextStyle(color: Colors.black),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEmergencyRequestPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Emergency Request'),
-          content: const Text('Choose an action:'),
-          actions: [
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSquareButton(
-                        'Hospital', Icons.local_hospital, context),
-                    _buildSquareButton('Police', Icons.local_police, context),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildSquareButton(
-                        'Fire', Icons.fire_extinguisher, context),
-                    _buildSquareButton('Other', Icons.apps, context),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildSquareButton(
-      String buttonText, IconData iconData, BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pop(context); // Close the popup
-      },
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        ),
-        fixedSize: const Size(130, 80),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Icon(iconData, color: Colors.black, size: 22),
-          const SizedBox(width: 5),
+          Icon(iconData, color: Colors.black, size: 35),
+          const SizedBox(height: 5),
           Text(
             buttonText,
             textAlign: TextAlign.center,
@@ -238,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSlider(int itemCount) {
     return SizedBox(
-      height: 150, // Adjust height according to your needs
+      height: 110, // Adjust height according to your needs
       child: PageView.builder(
         controller: _pageController,
         scrollDirection: Axis.horizontal,
@@ -247,8 +230,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildClimateCard(
-              'Temperature: ${20 + index}°C',
-              'Humidity: ${50 + index}%',
+              climateData[index]['temperature']!,
+              climateData[index]['humidity']!,
             ),
           );
         },
@@ -274,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -292,8 +275,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 40,
-                  width: 40,
+                  height: 30,
+                  width: 30,
                   child: LineChart(
                     LineChartData(
                       lineBarsData: [
@@ -321,6 +304,68 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showEmergencyRequestPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Emergency Request'),
+          content: const Text('Choose an action:'),
+          actions: [
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildSquareButton(
+                        'Medi', Icons.local_hospital, context),
+                    _buildSquareButton('Police', Icons.local_police, context),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildSquareButton(
+                        'Fire', Icons.fire_extinguisher, context),
+                    _buildSquareButton('Other', Icons.apps, context),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildSquareButton(
+      String buttonText, IconData iconData, BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context); // Close the popup
+      },
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
+        fixedSize: const Size(110, 60),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Icon(iconData, color: Colors.black, size: 22),
+          const SizedBox(width: 5),
+          Text(
+            buttonText,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.black),
+          ),
+        ],
       ),
     );
   }
