@@ -119,113 +119,113 @@ class _RegistrationFormState extends State<RegistrationForm> {
           TextFormField(
             controller: _userNameController,
             decoration: const InputDecoration(labelText: 'User Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your user name';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your user name';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _fullNameController,
             decoration: const InputDecoration(labelText: 'Full Name'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your full name';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your full name';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _nicController,
             decoration: const InputDecoration(labelText: 'NIC'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your NIC';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your NIC';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _contactNumberController,
             decoration: const InputDecoration(labelText: 'Contact Number'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your contact number';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your contact number';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(labelText: 'Email'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your email';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _genderController,
             decoration: const InputDecoration(labelText: 'Gender'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your gender';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your gender';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _addressController,
             decoration: const InputDecoration(labelText: 'Address'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your address';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your address';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _cityController,
             decoration: const InputDecoration(labelText: 'City'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your city';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your city';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _districtController,
             decoration: const InputDecoration(labelText: 'District'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your district';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your district';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _provinceController,
             decoration: const InputDecoration(labelText: 'Province'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your province';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your province';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
             controller: _userPasswordController,
             decoration: const InputDecoration(labelText: 'User Password'),
             obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your password';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter your password';
+            //   }
+            //   return null;
+            // },
           ),
         ],
       ),
@@ -238,34 +238,34 @@ class _RegistrationFormState extends State<RegistrationForm> {
       child: ListView(
         children: <Widget>[
           TextFormField(
-            controller: _vehiclesController,
+            // controller: _vehiclesController,
             decoration: const InputDecoration(labelText: 'Vehicles'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the number of vehicles';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter the number of vehicles';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
-            controller: _emergencyPersonsController,
+            // controller: _emergencyPersonsController,
             decoration: const InputDecoration(labelText: 'Emergency Persons'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the number of emergency persons';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter the number of emergency persons';
+            //   }
+            //   return null;
+            // },
           ),
           TextFormField(
-            controller: _devicesController,
+            // controller: _devicesController,
             decoration: const InputDecoration(labelText: 'Devices'),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the number of devices';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value == null || value.isEmpty) {
+            //     return 'Please enter the number of devices';
+            //   }
+            //   return null;
+            // },
           ),
         ],
       ),
