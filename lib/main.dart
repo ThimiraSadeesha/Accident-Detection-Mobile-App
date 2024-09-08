@@ -1,31 +1,23 @@
-import 'package:flutter/material.dart';
 import 'package:accident_detection_app/screens/welcome/welcome.dart';
+import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
 void main() {
-  runApp( Runner());
+  runApp(MyApp());
 }
 
-class Runner extends StatelessWidget {
-   Runner({super.key});
+class MyApp extends StatelessWidget {
   final MqttService mqttService = MqttService();
 
   @override
   Widget build(BuildContext context) {
-    mqttService.connect();
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
+    mqttService.connect(); // Connect to the broker when the app starts
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  const WelcomeScreen(),
+      home: WelcomeScreen()
     );
   }
-}
-
-void backgroundTaskCallback() {
-  print('Background service running...');
 }
 
 class MqttService {
@@ -35,7 +27,7 @@ class MqttService {
   final String username = 'sadee';
   final String password = 'qwerty';
 
-  MqttServerClient? client;
+  MqttServerClient? client; // Nullable client
 
   MqttService() {
     client = MqttServerClient(serverUri, clientId);
@@ -49,7 +41,7 @@ class MqttService {
         .withClientIdentifier(clientId)
         .authenticateAs(username, password)
         .keepAliveFor(20)
-        .withWillTopic('willtopic')
+        .withWillTopic('willtopic') // Optional
         .withWillMessage('My Will message')
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
@@ -68,6 +60,7 @@ class MqttService {
         client?.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
           final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
           final String pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+
           print('Received message: $pt from topic: ${c[0].topic}');
 
         });
