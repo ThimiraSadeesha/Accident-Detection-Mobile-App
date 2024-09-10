@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    mqttService.connect();
+    mqttService.connect(); // Connect to the broker when the app starts
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: WelcomeScreen()
@@ -27,7 +27,7 @@ class MqttService {
   final String username = 'sadee';
   final String password = 'qwerty';
 
-  MqttServerClient? client;
+  MqttServerClient? client; // Nullable client
 
   MqttService() {
     client = MqttServerClient(serverUri, clientId);
@@ -41,7 +41,7 @@ class MqttService {
         .withClientIdentifier(clientId)
         .authenticateAs(username, password)
         .keepAliveFor(20)
-        .withWillTopic('willtopic')
+        .withWillTopic('willtopic') // Optional
         .withWillMessage('My Will message')
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
@@ -87,5 +87,4 @@ class MqttService {
   void disconnect() {
     client?.disconnect();
   }
-
 }

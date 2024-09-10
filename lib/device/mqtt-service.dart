@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
@@ -38,7 +37,9 @@ class MqttService {
       await client?.connect(username, password);
       if (client?.connectionStatus?.state == MqttConnectionState.connected) {
         print('MQTT client connected');
-        onConnectedCallback();
+        onConnectedCallback(); // Call the callback on successful connection
+
+        // Subscribe to your topics
         client?.subscribe('esp/1/mpu6050', MqttQos.atMostOnce);
         client?.subscribe('esp/1/adxl345', MqttQos.atMostOnce);
         client?.subscribe('esp/1/accident', MqttQos.atMostOnce);
@@ -46,8 +47,8 @@ class MqttService {
         client?.updates!.listen((List<MqttReceivedMessage<MqttMessage>> c) {
           final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
           final String pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
-          // print('Received message: $pt from topic: ${c[0].topic}');
-
+          print('Received message: $pt from topic: ${c[0].topic}');
+          // Process the message here
         });
 
       } else {
@@ -72,51 +73,5 @@ class MqttService {
 
   void disconnect() {
     client?.disconnect();
-  }
-
-  void _showMessageDialog(BuildContext context, String payload, String topic) {
-    Map<String, dynamic> messageData = jsonDecode(payload);
-    String deviceId = messageData['id'] ?? 'Unknown Device';
-    String message = messageData['message'] ?? 'No message';
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Alert from $deviceId',
-            style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.warning_amber_rounded,
-                color: Colors.red,
-                size: 50.0,
-              ),
-              const SizedBox(height: 16),
-              Text(message), // Display the extracted message
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.green,
-              ),
-              child: const Text(
-                'OK',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
