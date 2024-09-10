@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
 import 'package:accident_detection_app/screens/dashboard/home/navigation/bottom_navigation.dart';
-import '../../main.dart';
+import '../../device/mqtt-service.dart';
 import '../menu/user_registration_screen.dart';
+
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -13,9 +14,13 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  late MqttService mqttService;
+
   @override
   void initState() {
     super.initState();
+    mqttService = MqttService(onConnectedCallback: _showConnectionDialog);
+    mqttService.connect();
     _startForegroundTask();
   }
 
@@ -24,16 +29,85 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       await FlutterForegroundTask.startService(
         notificationTitle: 'Safety App Running',
         notificationText: 'Tracking and commands active.',
-        callback: backgroundTaskCallback,
       );
     }
   }
 
+  void _showConnectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text('Connecting...'),
+            ],
+          ),
+        );
+      },
+    );
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            titlePadding: EdgeInsets.all(16),
+            title: Container(
+              padding: const EdgeInsets.fromLTRB(8,8,8,8),
+              child: const Text(
+                'Connection Status',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 50.0,
+                ),
+                SizedBox(height: 16),
+                Text('App is connected to the device.'),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHomePage()),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
+
+  }
+
+
   @override
   void dispose() {
-    // Optionally stop the foreground service when the widget is disposed
-    // Uncomment the following line if you want to stop the service when the user leaves this screen
-    // FlutterForegroundTask.stopService();
+    mqttService.disconnect();
     super.dispose();
   }
 

@@ -30,6 +30,7 @@ dependencies:
   flutter_background_service: ^5.0.10
   flutter_foreground_task: ^8.8.1
   flutter_local_notifications: ^17.2.2
+  mqtt_client: ^10.5.1
 
 dev_dependencies:
   flutter_test:
