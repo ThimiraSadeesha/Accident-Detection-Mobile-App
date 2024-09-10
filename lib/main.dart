@@ -99,7 +99,7 @@ class MqttService {
   }
 
   void _showAccidentDialog(String message) {
-    navigatorKey.currentState?.push(
+    Navigator.of(navigatorKey.currentContext!).push(
       MaterialPageRoute(
         builder: (context) {
           return AlertDialog(
@@ -111,17 +111,32 @@ class MqttService {
                 const SizedBox(height: 20),
                 Text('Message: $message'),
                 const SizedBox(height: 20),
-                const Text('Are you okay?'),
+                const Text(
+                  'Are you okay?',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             actions: <Widget>[
               TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: const Text('Yes'),
               ),
               TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -133,6 +148,8 @@ class MqttService {
       ),
     );
   }
+
+
 
   void onConnected() {
     print('Connected to the broker');
