@@ -19,7 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   void initState() {
     super.initState();
-    mqttService = MqttService(onConnectedCallback: _showConnectionDialog);
+    mqttService = MqttService(onConnectedCallback: _showConnectionDialog,);
     mqttService.connect();
     _startForegroundTask();
   }
@@ -32,6 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       );
     }
   }
+
 
   void _showConnectionDialog() {
     showDialog(
