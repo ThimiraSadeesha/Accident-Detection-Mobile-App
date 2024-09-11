@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const NotificationScreen()),
+                        builder: (context) => NotificationScreen()),
                   );
                 }),
                 _buildLargeSquareButton('Emergency', Icons.warning, () {

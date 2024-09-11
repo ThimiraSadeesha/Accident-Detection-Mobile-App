@@ -1,10 +1,12 @@
 import 'package:accident_detection_app/screens/menu/notification.dart';
 import 'package:accident_detection_app/screens/menu/vehicle_info_screen.dart';
 import 'package:flutter/material.dart';
+import '../../../device/mqtt-service.dart';
 import '../../menu/emergencyContact.dart';
 import '../../user/user-registration.dart';
 
 class ProfileScreen extends StatelessWidget {
+
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
           case 'Notification Preference':
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const NotificationScreen()),
+              MaterialPageRoute(builder: (context) =>  NotificationScreen()),
             );
             break;
             case 'Vehicle Preference':
@@ -108,3 +110,5 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+
+
