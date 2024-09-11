@@ -1,12 +1,31 @@
 import 'dart:convert';
 
+import 'package:accident_detection_app/screens/dashboard/home/notification-provider/notification-provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'package:accident_detection_app/screens/welcome/welcome.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => NotificationProvider(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -44,6 +63,15 @@ class MqttService {
   final String username = 'sadee';
   final String password = 'qwerty';
   final GlobalKey<NavigatorState> navigatorKey;
+  List<String> notifications = [];
+
+
+  // void _saveMessage(String message) {
+  //   notifications.add(message);
+  //   if (notifications.length > 100) {
+  //     notifications.removeAt(0);
+  //   }
+  // }
 
   MqttServerClient? client;
 
@@ -82,9 +110,8 @@ class MqttService {
             final String payload = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
             final Map<String, dynamic> message = jsonDecode(payload);
             final String messageContent = message['message'];
-
-            print('Received message from accident topic: $payload');
             _showAccidentDialog(messageContent);
+            _saveMessage(messageContent);
           }
         });
       } else {
@@ -97,6 +124,22 @@ class MqttService {
       client?.disconnect();
     }
   }
+
+  Future<void> _saveMessagesToLocalStorage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList('notifications', notifications);
+  }
+  void _saveMessage(String message) {
+    // Add the message to the global provider
+    navigatorKey.currentContext!.read<NotificationProvider>().addNotification(message);
+  }
+
+  Future<void> _loadMessages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    notifications = prefs.getStringList('notifications') ?? [];
+  }
+
+
 
   void _showAccidentDialog(String message) {
     Navigator.of(navigatorKey.currentContext!).push(
