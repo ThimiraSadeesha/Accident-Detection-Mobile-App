@@ -6,165 +6,238 @@ class InsuranceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: Text('Insurance',style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.call,color: Colors.white,),
+            onPressed: () {
+              _showCallOptions(context);
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(15.0, 50.0, 15.0, 15.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildUserProfileSection(),
-            SizedBox(height: 12),
-            _buildUpdateButton(context),
-            SizedBox(height: 12),
-            _buildPolicyPlansSection(),
-            SizedBox(height: 12),
-            _buildFileClaimSection(context, 'Report an accident'),
-            _buildFileClaimSection(context, 'Submit a medical claim'),
+            _buildInsuranceDetailCard(),
+            SizedBox(height: 20),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddInsuranceScreen()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                fixedSize: const Size(40, 45),
+              ),
+              child: const Text(
+                'Add Insurance',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
+              ),
+            ),
+
           ],
         ),
       ),
     );
   }
 
-  Widget _buildUserProfileSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Stack(
-          alignment: Alignment.center,
+  Widget _buildInsuranceDetailCard() {
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildProfileImage(),
-            // You can add an edit icon or any other overlay on the image if needed
+            Text(
+              'Insurance Name: Home Insurance',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Town: Springfield',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 12),
+            _buildActionButton('Report an Accident', Icons.report, () {
+              // Navigate to the accident report screen
+            }),
+            SizedBox(height: 12),
+            _buildActionButton('Request Help', Icons.help, () {
+              // Navigate to the help request screen
+            }),
           ],
         ),
-        SizedBox(height: 10),
-        Text(
-          'Emma Watson',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          'Member since 2019',
-          style: TextStyle(
-            color: Colors.grey,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildUpdateButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        // Navigate to the user profile editing screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => UserProfileEditingScreen()),
+  Widget _buildActionButton(String label, IconData icon, VoidCallback onTap) {
+    return ElevatedButton.icon(
+      onPressed: onTap,
+      icon: Icon(icon),
+      label: Text(label),
+    );
+  }
+
+  void _showCallOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.phone),
+              title: Text('Voice Call'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.video_call),
+              title: Text('Video Call'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         );
       },
-      child: Text('Update'),
-    );
-  }
-
-  Widget _buildPolicyPlansSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Policy Plans',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        _buildPolicyCard('Home insurance', 'View policy', '\$500'),
-        _buildPolicyCard('Auto insurance', 'View policy', '\$700'),
-      ],
-    );
-  }
-
-  Widget _buildPolicyCard(String policyType, String buttonText, String annualPremium) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        title: Text(policyType),
-        subtitle: Text('Annual Premium: $annualPremium'),
-        trailing: ElevatedButton(
-          onPressed: () {
-            // Navigate to a screen with detailed policy information
-            // You can implement the navigation logic here
-          },
-          child: Text(buttonText),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFileClaimSection(BuildContext context, String title) {
-    return ListTile(
-      title: Text(title),
-      trailing: Icon(Icons.arrow_forward_ios),
-      onTap: () {
-        // Add your logic here for handling button taps
-        switch (title) {
-          case 'Report an accident':
-          // Navigate to the screen for reporting an accident
-            break;
-          case 'Submit a medical claim':
-          // Navigate to the screen for submitting a medical claim
-            break;
-          default:
-            break;
-        }
-      },
-    );
-  }
-
-  Widget _buildProfileImage() {
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage('images/me.jpg'),
-        ),
-      ),
     );
   }
 }
+class AddInsuranceScreen extends StatefulWidget {
+  @override
+  _AddInsuranceScreenState createState() => _AddInsuranceScreenState();
+}
 
-class UserProfileEditingScreen extends StatelessWidget {
+class _AddInsuranceScreenState extends State<AddInsuranceScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  // Controllers for form fields
+  final TextEditingController _insuranceCodeController = TextEditingController();
+  final TextEditingController _insuranceNameController = TextEditingController();
+  final TextEditingController _contactNumberController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _districtController = TextEditingController();
+  final TextEditingController _provinceController = TextEditingController();
+  final TextEditingController _areaCoveredController = TextEditingController();
+
+  String _selectedInsurance = 'Select Insurance';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Edit User Profile'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildProfileImageView(),
-            const SizedBox(height: 16),
-            const Text('User Profile Editing Screen'),
-          ],
+        backgroundColor: Colors.red,
+        title: Text('Add Insurance',style: TextStyle(color: Colors.white)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-      ),
-    );
-  }
 
-  Widget _buildProfileImageView() {
-    return Container(
-      width: 180,
-      height: 180,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage('images/me.jpg'),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              DropdownButtonFormField<String>(
+                value: _selectedInsurance,
+                items: [
+                  DropdownMenuItem(child: Text('Select Insurance'), value: 'Select Insurance'),
+                  DropdownMenuItem(child: Text('Home Insurance'), value: 'Home Insurance'),
+                  DropdownMenuItem(child: Text('Auto Insurance'), value: 'Auto Insurance'),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedInsurance = value!;
+                  });
+                },
+                decoration: InputDecoration(labelText: 'Insurance Type'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _insuranceCodeController,
+                decoration: InputDecoration(labelText: 'Insurance Code'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _insuranceNameController,
+                decoration: InputDecoration(labelText: 'Insurance Name'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _contactNumberController,
+                decoration: InputDecoration(labelText: 'Contact Number'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _cityController,
+                decoration: InputDecoration(labelText: 'City'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _districtController,
+                decoration: InputDecoration(labelText: 'District'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _provinceController,
+                decoration: InputDecoration(labelText: 'Province'),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _areaCoveredController,
+                decoration: InputDecoration(labelText: 'Area Covered'),
+              ),
+              SizedBox(height: 32),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  fixedSize: const Size(40, 45),
+                ),
+                child: const Text(
+                  'Add',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
