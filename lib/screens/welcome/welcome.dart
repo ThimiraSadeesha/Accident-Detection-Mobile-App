@@ -1,3 +1,4 @@
+import 'package:accident_detection_app/screens/user/user-registration.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flutter_foreground_task/flutter_foreground_task.dart';
@@ -215,7 +216,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegistrationForm()),
+                    MaterialPageRoute(builder: (context) => RegistrationScreen()),
                   );
                 },
                 child: const Text(
