@@ -354,8 +354,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildSquareButton(
-                        'Medi', Icons.local_hospital, context),
-                    _buildSquareButton('Police', Icons.local_police, context),
+                      'Medi',
+                      Icons.local_hospital,
+                      _handleMediAction('medium'),
+                      context,
+                    ),
+                    _buildSquareButton(
+                      'Police',
+                      Icons.local_police,
+                      _handleMediAction('medium'),
+                      context,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -363,8 +372,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildSquareButton(
-                        'Fire', Icons.fire_extinguisher, context),
-                    _buildSquareButton('Other', Icons.apps, context),
+                      'Fire',
+                      Icons.fire_extinguisher,
+                      _handleMediAction('medium'),
+                      context,
+                    ),
+                    _buildSquareButton(
+                      'Other',
+                      Icons.apps,
+                      _handleMediAction('medium'),
+                      context,
+                    ),
                   ],
                 ),
               ],
@@ -373,6 +391,10 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+   _handleMediAction(String severity) {
+    requestEmergency(severity, _locationMessage, 'active', 1);
   }
 
 
@@ -396,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       // Handle success response
       Fluttertoast.showToast(
-        msg: 'Emergency Requested: ${response.data}',
+        msg: 'Emergency Requested',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.green,
@@ -448,11 +470,11 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
 
-  Widget _buildSquareButton(String buttonText, IconData iconData,
+  Widget _buildSquareButton(String buttonText, IconData iconData,VoidCallback onPressed,
       BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.pop(context);
+        onPressed();
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
