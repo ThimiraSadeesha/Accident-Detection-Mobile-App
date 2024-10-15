@@ -26,16 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentPage = 0;
   late Timer _timer;
   List<Map<String, String>> climateData = [
-    {'temperature': 'Loading...', 'humidity': 'Loading...'},
-    {'temperature': 'Loading...', 'humidity': 'Loading...'},
+    {'temperature': 'Loading...'},
+    {'temperature': 'Loading...'},
   ];
 
   Future<void> _getCurrentLocation() async {
     Position? position = await _locationService.getCurrentLocation();
     if (position != null) {
       setState(() {
-        _locationMessage =
-        "${position.latitude},${position.longitude}";
+        _locationMessage = "${position.latitude},${position.longitude}";
       });
       _locationService.getLocationStream().listen((Position position) {
         setState(() {
@@ -80,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   Future<void> fetchClimateData() async {
     const apiUrl =
         'https://api.open-meteo.com/v1/forecast?latitude=6.842696&longitude=80.017209&current=temperature_2m,relative_humidity_2m';
@@ -101,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (int i = 0; i < climateData.length; i++) {
             climateData[i] = {
               'temperature': temperature,
-              'humidity': humidity,
+
             };
           }
         });
@@ -131,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: () {
                 _getCurrentLocation();
-                requestEmergency('high',_locationMessage,'pending',1);
+                requestEmergency('high', _locationMessage, 'pending', 1);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -181,8 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildLargeSquareButton(
-                    'Notification', Icons.notifications, () {
+                _buildLargeSquareButton('Notification', Icons.notifications,
+                    () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -223,8 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLargeSquareButton(String buttonText, IconData iconData,
-      VoidCallback onPressed) {
+  Widget _buildLargeSquareButton(
+      String buttonText, IconData iconData, VoidCallback onPressed) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
@@ -260,8 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildClimateCard(
-              climateData[index]['temperature']!,
-              climateData[index]['humidity']!,
+              climateData[index]['temperature']!
             ),
           );
         },
@@ -269,14 +266,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildClimateCard(String temperature, String humidity) {
+  Widget _buildClimateCard(String temperature) {
     return Card(
-
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 4,
-
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -299,11 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       temperature,
                       style: const TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      humidity,
-                      style: const TextStyle(fontSize: 18),
-                    ),
+                    ),s
                   ],
                 ),
                 SizedBox(
@@ -356,13 +347,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildSquareButton(
                       'Medi',
                       Icons.local_hospital,
-                      _handleMediAction('medium'),
+                          () => _handleMediAction('medium'),
                       context,
                     ),
                     _buildSquareButton(
                       'Police',
                       Icons.local_police,
-                      _handleMediAction('medium'),
+                          () =>  _handleMediAction('medium'),
                       context,
                     ),
                   ],
@@ -374,13 +365,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     _buildSquareButton(
                       'Fire',
                       Icons.fire_extinguisher,
-                      _handleMediAction('medium'),
+                      () => _handleMediAction('medium'),
                       context,
                     ),
                     _buildSquareButton(
                       'Other',
                       Icons.apps,
-                      _handleMediAction('medium'),
+                          () => _handleMediAction('medium'),
                       context,
                     ),
                   ],
@@ -393,12 +384,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-   _handleMediAction(String severity) {
+  _handleMediAction(String severity) {
     requestEmergency(severity, _locationMessage, 'active', 1);
   }
 
-
-  void requestEmergency(String severity, String location, String incidentStatus, int deviceId) async {
+  void requestEmergency(String severity, String location, String incidentStatus,
+      int deviceId) async {
     try {
       Dio dio = Dio();
       Response response = await dio.post(
@@ -438,8 +429,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
-
   // void requestEmergency() async {
   //   Dio dio = Dio();
   //   Response response = await dio.post(
@@ -469,9 +458,8 @@ class _HomeScreenState extends State<HomeScreen> {
   //   );
   // }
 
-
-  Widget _buildSquareButton(String buttonText, IconData iconData,VoidCallback onPressed,
-      BuildContext context) {
+  Widget _buildSquareButton(String buttonText, IconData iconData,
+      VoidCallback onPressed, BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         onPressed();
