@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSlider(int itemCount) {
     return SizedBox(
-      height: 180, // Adjust height according to your needs
+      height: 150, // Adjust height according to your needs
       child: PageView.builder(
         controller: _pageController,
         scrollDirection: Axis.horizontal,
@@ -278,13 +278,13 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Climate Changes',
+              'Temperature',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -294,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       temperature,
                       style: const TextStyle(fontSize: 18),
-                    ),s
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -393,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       Dio dio = Dio();
       Response response = await dio.post(
-        'http://192.168.8.184:3000/accident',
+        'http://192.168.8.103:3000/accident',
         data: {
           'severity': severity,
           'location': location,

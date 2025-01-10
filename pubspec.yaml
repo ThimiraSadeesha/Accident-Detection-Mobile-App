@@ -23,17 +23,17 @@ dependencies:
   connectivity_plus: ^6.0.5
   dio: ^5.4.3+1
   fluttertoast: ^8.2.5
-  fl_chart: ^0.68.0
+  fl_chart: ^0.70.1
   flutter_polyline_points: ^2.1.0
   speech_to_text: ^7.0.0
   url_launcher: ^6.3.0
   flutter_background_service: ^5.0.10
   flutter_foreground_task: ^8.8.1
-  flutter_local_notifications: ^17.2.2
+  flutter_local_notifications: ^18.0.1
   mqtt_client: ^10.5.1
   shared_preferences: ^2.3.2
   provider: ^6.1.2
-  intl: ^0.19.0
+  intl: ^0.20.1
   permission_handler: ^11.3.1
 
 dev_dependencies:
@@ -41,7 +41,7 @@ dev_dependencies:
     sdk: flutter
 
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 
 flutter:
