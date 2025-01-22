@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: <Widget>[
           const HomeScreen(),
           const MapScreen(),
-          SparePartsStoreApp(),
+          // SparePartsStoreApp(),
           const InsuranceScreen(),
           const ProfileScreen(),
         ],
@@ -51,11 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.red,
             label: 'Map',
           ),
-          BottomNavigationBarItem(
-          icon: Icon(Icons.shop),
-      backgroundColor: Colors.red,
-      label: 'Store',
-    ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.contact_emergency),
             backgroundColor: Colors.red,

@@ -61,7 +61,7 @@ class MqttService {
   final int port = 1883;
   final String clientId = 'flutter_client';
   final String username = 'sadee';
-  final String password = 'qwerty';
+  final String password = '9tC4MUEQbsy9';
   final GlobalKey<NavigatorState> navigatorKey;
   List<String> notifications = [];
 
@@ -109,9 +109,11 @@ class MqttService {
             final MqttPublishMessage recMess = c[0].payload as MqttPublishMessage;
             final String payload = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
             final Map<String, dynamic> message = jsonDecode(payload);
-            final String messageContent = message['message'];
-            _showAccidentDialog(messageContent);
-            _saveMessage(messageContent);
+            final String messageContent = message['status'];
+            final String msg ='$messageContent: Status Accident Detect' ;
+            print(msg);
+            _showAccidentDialog(msg);
+            _saveMessage(msg);
           }
         });
       } else {
