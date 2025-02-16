@@ -48,7 +48,7 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
       try {
         Dio dio = Dio();
         Response response = await dio.post(
-          'http://192.168.8.184:3000/emergency/person',
+          'http://192.168.8.103:3000/emergency/person',
           data: emergencyContactDetails,
           options: Options(
             headers: {

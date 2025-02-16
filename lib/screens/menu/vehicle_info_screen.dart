@@ -41,7 +41,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
     if (_formKey.currentState!.validate()) {
       try {
         final response = await _dio.post(
-          'http://192.168.8.184:3000/vehicle',
+          'http://192.168.8.103:3000/vehicle',
           options: Options(
             headers: {
               'Content-Type': 'application/json',

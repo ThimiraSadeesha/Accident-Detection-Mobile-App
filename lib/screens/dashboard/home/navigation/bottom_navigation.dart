@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../menu/store.dart';
 import '../home_screen.dart';
 import '../insurance_screen.dart';
 import '../map_screen.dart';
@@ -23,11 +24,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: PageView(
         controller: pageController,
-        children: const <Widget>[
-          HomeScreen(),
-          MapScreen(),
-          InsuranceScreen(),
-          ProfileScreen(),
+        children: <Widget>[
+          const HomeScreen(),
+          const MapScreen(),
+          // SparePartsStoreApp(),
+          const InsuranceScreen(),
+          const ProfileScreen(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -49,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Colors.red,
             label: 'Map',
           ),
+
           BottomNavigationBarItem(
             icon: Icon(Icons.contact_emergency),
             backgroundColor: Colors.red,
@@ -58,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.person),
             backgroundColor: Colors.red,
             label: 'Profile',
-          ),
+          )
         ],
       ),
     );

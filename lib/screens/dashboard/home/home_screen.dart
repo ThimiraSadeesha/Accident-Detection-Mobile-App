@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../menu/emergencyContact.dart';
 import '../../menu/notification.dart';
 import '../../menu/vehicle_info_screen.dart';
+import '../../user/location_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,18 +21,39 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
+  String _locationMessage = "";
+  final LocationService _locationService = LocationService();
   int _currentPage = 0;
   late Timer _timer;
   List<Map<String, String>> climateData = [
-    {'temperature': 'Loading...', 'humidity': 'Loading...'},
-    {'temperature': 'Loading...', 'humidity': 'Loading...'},
+    {'temperature': 'Loading...'},
+    {'temperature': 'Loading...'},
   ];
+
+  Future<void> _getCurrentLocation() async {
+    Position? position = await _locationService.getCurrentLocation();
+    if (position != null) {
+      setState(() {
+        _locationMessage = "${position.latitude},${position.longitude}";
+      });
+      _locationService.getLocationStream().listen((Position position) {
+        setState(() {
+          "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+        });
+      });
+    } else {
+      setState(() {
+        _locationMessage = "Location permissions are denied";
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     _startAutoSlide();
     _startClimateDataUpdate();
+    _getCurrentLocation();
   }
 
   @override
@@ -53,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   Future<void> fetchClimateData() async {
     const apiUrl =
         'https://api.open-meteo.com/v1/forecast?latitude=6.842696&longitude=80.017209&current=temperature_2m,relative_humidity_2m';
@@ -74,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (int i = 0; i < climateData.length; i++) {
             climateData[i] = {
               'temperature': temperature,
-              'humidity': humidity,
+
             };
           }
         });
@@ -103,7 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 25),
             ElevatedButton(
               onPressed: () {
-                _showEmergencyRequestPopup(context);
+                _getCurrentLocation();
+                requestEmergency('high', _locationMessage, 'pending', 1);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
@@ -153,7 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildLargeSquareButton('Notification', Icons.notifications, () {
+                _buildLargeSquareButton('Notification', Icons.notifications,
+                    () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -186,7 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 40),
-            _buildSlider(climateData.length), // Slider now displays live climate data
+            _buildSlider(climateData.length),
+            // Slider now displays live climate data
           ],
         ),
       ),
@@ -221,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSlider(int itemCount) {
     return SizedBox(
-      height: 110, // Adjust height according to your needs
+      height: 150, // Adjust height according to your needs
       child: PageView.builder(
         controller: _pageController,
         scrollDirection: Axis.horizontal,
@@ -230,8 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: _buildClimateCard(
-              climateData[index]['temperature']!,
-              climateData[index]['humidity']!,
+              climateData[index]['temperature']!
             ),
           );
         },
@@ -239,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildClimateCard(String temperature, String humidity) {
+  Widget _buildClimateCard(String temperature) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -251,13 +278,13 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Climate Changes',
+              'Temperature',
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -266,16 +293,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Text(
                       temperature,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      humidity,
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 18),
                     ),
                   ],
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 40,
                   width: 30,
                   child: LineChart(
                     LineChartData(
@@ -322,17 +345,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildSquareButton(
-                        'Medi', Icons.local_hospital, context),
-                    _buildSquareButton('Police', Icons.local_police, context),
+                      'Medi',
+                      Icons.local_hospital,
+                          () => _handleMediAction('medium'),
+                      context,
+                    ),
+                    _buildSquareButton(
+                      'Police',
+                      Icons.local_police,
+                          () =>  _handleMediAction('medium'),
+                      context,
+                    ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildSquareButton(
-                        'Fire', Icons.fire_extinguisher, context),
-                    _buildSquareButton('Other', Icons.apps, context),
+                      'Fire',
+                      Icons.fire_extinguisher,
+                      () => _handleMediAction('medium'),
+                      context,
+                    ),
+                    _buildSquareButton(
+                      'Other',
+                      Icons.apps,
+                          () => _handleMediAction('medium'),
+                      context,
+                    ),
                   ],
                 ),
               ],
@@ -343,17 +384,91 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSquareButton(
-      String buttonText, IconData iconData, BuildContext context) {
+  _handleMediAction(String severity) {
+    requestEmergency(severity, _locationMessage, 'active', 1);
+  }
+
+  void requestEmergency(String severity, String location, String incidentStatus,
+      int deviceId) async {
+    try {
+      Dio dio = Dio();
+      Response response = await dio.post(
+        'http://192.168.8.103:3000/accident',
+        data: {
+          'severity': severity,
+          'location': location,
+          'incidentStatus': incidentStatus,
+          'deviceId': deviceId,
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      // Handle success response
+      Fluttertoast.showToast(
+        msg: 'Emergency Requested',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } catch (e) {
+      // Handle error
+      Fluttertoast.showToast(
+        msg: 'Failed to request emergency',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
+
+  // void requestEmergency() async {
+  //   Dio dio = Dio();
+  //   Response response = await dio.post(
+  //     'http://192.168.8.184:3000/accident',
+  //     data: {
+  //   'severity':'high',
+  //   'location':'',
+  //   'incidentStatus':'pending',
+  //   'deviceId':1,
+  //
+  //   },
+  //     options: Options(
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //
+  //
+  //   Fluttertoast.showToast(
+  //     msg: 'Emergency  Requested',
+  //     toastLength: Toast.LENGTH_SHORT,
+  //     gravity: ToastGravity.BOTTOM,
+  //     backgroundColor: Colors.green,
+  //     textColor: Colors.white,
+  //     fontSize: 16.0,
+  //   );
+  // }
+
+  Widget _buildSquareButton(String buttonText, IconData iconData,
+      VoidCallback onPressed, BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.pop(context); // Close the popup
+        onPressed();
       },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
         ),
-        fixedSize: const Size(110, 60),
+        fixedSize: const Size(120, 60),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -370,3 +485,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+//
+//   Future<void> _getCurrentLocation() async {
+//     var status = await Permission.locationWhenInUse.request();
+//     if (status.isGranted) {
+//       Position position = await Geolocator.getCurrentPosition(
+//           locationSettings: LocationSettings(
+//               accuracy: LocationAccuracy.high, distanceFilter: 10));
+//       setState(() {
+//         _locationMessage =
+//         "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+//       });
+//       Geolocator.getPositionStream(
+//           locationSettings: const LocationSettings(
+//               accuracy: LocationAccuracy.best, distanceFilter: 10))
+//           .listen((Position position) {
+//         setState(() {
+//           _locationMessage =
+//           "Latitude: ${position.latitude}, Longitude: ${position.longitude}";
+//         });
+//       });
+//     } else {
+//       setState(() {
+//         _locationMessage = "Location permissions are denied";
+//       });
+//     }
+//   }
+// }

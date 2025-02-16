@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -55,17 +56,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         'userPassword': _userPasswordController.text,
       };
 
-      try {
-        // Dio dio = Dio();
-        // Response response = await dio.post(
-        //   'http://your-server-url/register',
-        //   data: user,
-        //   options: Options(
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //   ),
-        // );
+        Dio dio = Dio();
+        Response response = await dio.post(
+          'http://192.168.8.184:3000/user',
+          data: user,
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          ),
+        );
+
+
 
         Fluttertoast.showToast(
           msg: 'User registered successfully',
@@ -76,11 +78,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           fontSize: 16.0,
         );
 
-        // print('Response data: ${response.data}');
-      } catch (e) {
-        print('Error sending data: $e');
-      }
-      _formKey.currentState!.reset();
+        print('Response data: ${response.data}');
+      // } catch (se) {
+      //   print('Error sending data: ');
+      // }
+      // _formKey.currentState!.reset();
     }
   }
 
@@ -133,12 +135,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Username',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your username';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -147,12 +149,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Full Name',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your full name';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your full name';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -161,12 +163,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'NIC',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your NIC';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your NIC';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -175,12 +177,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Contact Number',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your contact number';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your contact number';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -189,12 +191,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty || !value.contains('@')) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty || !value.contains('@')) {
+                //     return 'Please enter a valid email';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               Row(
@@ -235,12 +237,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Gender',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your gender';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your gender';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -249,12 +251,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Address',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your address';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your address';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -263,12 +265,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'City',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your city';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your city';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -277,12 +279,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'District',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your district';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your district';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -291,12 +293,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   labelText: 'Province',
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your province';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your province';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -306,12 +308,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   border: OutlineInputBorder(),
                 ),
                 obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value == null || value.isEmpty) {
+                //     return 'Please enter your password';
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 32),
               Row(
